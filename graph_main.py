@@ -42,16 +42,16 @@ class Graph():
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
         if not next_destinations:
           return "Route Not Possible"
-        # next node is the destination with the lowest weight
+       
         current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
 
-      # Work back through destinations in shortest path
+      
       path = []
       while current_node is not None:
         path.append(current_node)
         next_node = shortest_paths[current_node][0]
         current_node = next_node
-      # Reverse path
+      
       path = path[::-1]
       return "-->".join(map(str,path))
 
