@@ -1,87 +1,57 @@
-from collections import defaultdict
+import math
+INF = math.inf
 
+#IMPORTANT: nodes are indexed by numbers starting from zero, NOT names
+#If nodes are not connetcted the weight is INF
+test_graph = [
+             [0, 1, 1, 1, INF],
+             [1, 0, INF, 1, 1], 
+             [1, INF, 0, 1, INF], 
+             [1, 1, 1, 0, 1], 
+             [INF, 1, INF, 1, 0]]
 
 class Graph():
-    def __init__(self):
-        """
-    self.edges словарь, содержащий все возможные следующие узлы; представлен в виде:
-     {'X': ['A', 'B', 'C', 'E'], ...}
-    self.weights содержит веса пути между узлами; представлен в виде:
-     {('X', 'A'): 7, ('X', 'B'): 2, ...}
-    """
-        self.edges = defaultdict(list)
-        self.weights = {}
+	
+	def __init__(self, matr):
+		#takes the initialization matrix
+		self.matr = matr
+		self.size = len(self.matr)
+		
+	def dijkstra(self, start, end):
+		#array of distances from the start node to other nodes
+		dist_from_start = [INF]*self.size
+		dist_from_start[start] = 0
+		
+		#remembers the path to each as arrays
+		path_from_start = [[] for i in range(self.size)]
+		path_from_start[start] = [start]
+		#list of visited nodes, non-ordered
+		visited = []
+		
+		curr_node = start
+		
+		while curr_node != end:
+			
+			#node relaxation
+			for next_node in range(self.size):
+				if self.matr[next_node][curr_node] + dist_from_start[curr_node] < dist_from_start[next_node]:
+					dist_from_start[next_node] = self.matr[next_node][curr_node] + dist_from_start[curr_node]
+					path_from_start[next_node] = path_from_start[curr_node] + [next_node]
+			visited.append(curr_node)
+			
+			#choose next node to relax (curr_node)
+			closest_dist = INF
+			for candidate in range(self.size):
+				if candidate not in visited and dist_from_start[candidate] < closest_dist:
+					closest_dist = dist_from_start[candidate]
+					curr_node = candidate
+			
+			#check if route is possible
+			if closest_dist == INF: return "Route not possible"
+		
+		return path_from_start[end]
 
-    def add_road(self, from_node, to_node, weight):
-        # пути двунаправлены
-        self.edges[from_node].append(to_node)
-        self.edges[to_node].append(from_node)
-        self.weights[(from_node, to_node)] = weight
-        self.weights[(to_node, from_node)] = weight
-
-    def shortest_road(self, initial, end):
-
-      shortest_paths = {initial: (None, 0)}
-      current_node = initial
-      visited = set()
-
-      while current_node != end:
-        visited.add(current_node)
-        destinations = self.edges[current_node]
-        weight_to_current_node = shortest_paths[current_node][1]
-
-        for next_node in destinations:
-          weight = self.weights[(current_node, next_node)] + weight_to_current_node
-          if next_node not in shortest_paths:
-            shortest_paths[next_node] = (current_node, weight)
-          else:
-            current_shortest_weight = shortest_paths[next_node][1]
-            if current_shortest_weight > weight:
-              shortest_paths[next_node] = (current_node, weight)
-
-        next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
-        if not next_destinations:
-          return "Route Not Possible"
-       
-        current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
-
-      
-      path = []
-      while current_node is not None:
-        path.append(current_node)
-        next_node = shortest_paths[current_node][0]
-        current_node = next_node
-      
-      path = path[::-1]
-      return "-->".join(map(str,path))
-
-    def printGraph(self):
-      for i in self.edges:
-        print(f"{i}--->{self.edges[i]} ")
-#пример работы
-graph = Graph()
-roads = [
-    ('X', 'A', 7),
-    ('X', 'B', 2),
-    ('X', 'C', 3),
-    ('X', 'E', 4),
-    ('A', 'B', 3),
-    ('A', 'D', 4),
-    ('B', 'D', 4),
-    ('B', 'H', 5),
-    ('C', 'L', 2),
-    ('D', 'F', 1),
-    ('F', 'H', 3),
-    ('G', 'H', 2),
-    ('G', 'Y', 2),
-    ('I', 'J', 6),
-    ('I', 'K', 4),
-    ('I', 'L', 4),
-    ('J', 'L', 1),
-    ('K', 'Y', 5),
-]
-
-for road in roads:
-    graph.add_road(*road)
-
-print(graph.shortest_road('X','Y'))
+g = Graph(test_graph)
+#print(g.dijkstra(3, 4))
+#print(g.dijkstra(4, 5))
+print(g.dijkstra(2, 4))
