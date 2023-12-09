@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-This project is aimed at creating a visualization of finding differnt paths in graphs
+This project is aimed at creating an interactive visualizater of graphs and different ways of finding shortest paths in them.
 
-Комментарии на данный момент:
+User guide:
+run graph_visualation.py and enjoy, the program is interactive (not ready yet)
 
-1)graph_sys.py: 
-файл, где содержатся готовые матрицы графа (их можно использовать в качестве примеров) и написан код для самостоятельного создания матрицы графа. Желательно чтобы это все было сделано в виде своего Class.
-2)graph_main.py: 
-файл, где содержится код для нахождения кратчайшего пути между двумя точками и подсчета его цены + его вывод при использовании матрицы графа из graph_sys.py.
-3) graph_vis.py: 
-файл, где содержится код для визуализации самого графа + кратчайшего пути между двумя точками.
-=======
-This project is aimed at creating a visualization of finding differnt paths in graph
->>>>>>> 7557f14e6d63dd02a368d28eb30bfc343f453b01
+File desc:
+1)graphs_main.py only contains the graph class, which is imported by the visualiser (graph_visualisation.py). Can be used for debugging purposes.
+2)graph_visualisation.py is the main executable file and works directly with the user. It does the whole work on visualasing results and interactively updating data from user.

@@ -10,14 +10,7 @@ test_graph = [
              [1, INF, 0, 1, INF], 
              [1, 1, 1, 0, 1], 
              [INF, 1, INF, 1, 0]]
-'''
-[
-[0,    1,    2,       3,  None],
-[0,    1,    None,    3,  4],
-[0,    None, 2,       3,  None],
-[0,    1,    2,       3,  4],
-[None, 1,    None,    3,  4]]
-'''
+
 #test graph: https://u.foxford.ngcdn.ru/uploads/tinymce_image/image/1959/1.png
 
 class Graph():
@@ -64,7 +57,6 @@ class Graph():
 	
 	def FloydWarshall(self, start, end):
 		
-		#DP = [ [ [INF for j in range(self.size)] for i in range(self.size)] for k in range(self.size+1)]
 		DP = self.matr
 		prev = [[None for j in range(self.size)] for i in range(self.size)] #for path reconstruction, previous[start][end] contains node previous to end on shortest start-end path
 		for i in range(self.size):
@@ -78,8 +70,6 @@ class Graph():
 						DP[i][j] = DP[i][k] + DP[k][j]
 						prev[i][j] = prev[k][j]
 		
-		#print(DP)
-		#print(prev)
 		#check if route is possible
 		l = DP[start][end] #shortest path length
 		if l == INF: return "Route not possible"
@@ -87,7 +77,6 @@ class Graph():
 		path = [end]
 		j = end
 		while j != start:
-			#print(j)
 			path.append(prev[start][j])
 			j = prev[start][j]
 		path = path[::-1]
