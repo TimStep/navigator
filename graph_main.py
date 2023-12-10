@@ -13,13 +13,23 @@ test_graph = [
 
 #test graph: https://u.foxford.ngcdn.ru/uploads/tinymce_image/image/1959/1.png
 
+paradox_graph = [
+                  [0, 8, 5],
+                  [8, 0, 2],
+                  [5, 2, 0]]
+#the paradox is that the edge 0-1 is not the shortest 0-1 path
+
 class Graph():
 	
 	def __init__(self, matr):
 		#takes the initialization matrix
 		self.matr = matr
 		self.size = len(self.matr)
-		#self.edges = 
+		self.edges = []
+		for node1 in range(self.size):
+			for node2 in range(self.size):
+				 if node1 != node2 and self.matr[node1][node2] != INF and True not in [(node2, node1, self.matr[node2][node1])  in self.edges]:
+				 	self.edges.append((node1, node2, self.matr[node1][node2]))
 		
 	def Dijkstra(self, start, end):
 		#array of distances from the start node to other nodes
@@ -61,7 +71,7 @@ class Graph():
 		prev = [[None for j in range(self.size)] for i in range(self.size)] #for path reconstruction, previous[start][end] contains node previous to end on shortest start-end path
 		for i in range(self.size):
 			for j in range(self.size):
-				if self.matr[i][j] != INF: prev[i][j] = i
+				if self.matr[i][j] != INF: prev[i][j] = i #still not sure if it works totally correct, but it even solves the paradox graph
 
 		for k in range(1, self.size):
 			for i in range(self.size):
@@ -82,13 +92,39 @@ class Graph():
 		path = path[::-1]
 		
 		return (l, path)
+	
+	def FordBellman(self, start, end):
 		
+		DP = [INF for i in range(self.size)]
+		DP[start] = 0
+
+		path = [[] for i in range(self.size)]
+		path[start] = [start]
+		
+		#iterating by edges, faster if the graph in not dense
+		if len(self.edges) < self.size**2 or True: #!!!remove "or True" when iterating by nodes variant will be done
+			print('not dense')
+			for k in range(1, self.size):
+				for edge in self.edges:
+					if DP[edge[0]] + self.matr[edge[0]][edge[1]] < DP[edge[1]]:
+						DP[edge[1]] = DP[edge[0]] + self.matr[edge[0]][edge[1]]
+						path[edge[1]] = path[edge[0]] + [edge[1]]
+					#review the edge in both ways
+					if DP[edge[1]] + self.matr[edge[1]][edge[0]] < DP[edge[0]]:
+						DP[edge[0]] = DP[edge[1]] + self.matr[edge[1]][edge[0]]
+						path[edge[0]] = path[edge[1]] + [edge[0]]
+					if k == self.size - 1 and (edge[0] == end or edge[1] == end): break
+		
+		if DP[end] == INF: return "Route not possible"
+		return path[end]
+	
 g = Graph(test_graph)
-#print(g.dijkstra(3, 4))
-#print(g.dijkstra(4, 5))
+print(g.edges)
 print('Dijkstra')
 print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.Dijkstra(2, 4)))
 print('Floyd-Warshall')
 res = g.FloydWarshall(2, 4)
 print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in res[1]))
 print("Length: " + str(res[0]))
+print("Ford-Bellman")
+print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.FordBellman(2, 4)))
