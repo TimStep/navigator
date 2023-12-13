@@ -5,16 +5,8 @@ import math
 
 
 
-INF = math.inf
+inf = math.inf
 
-test_graph = [
-    [0, 1, 1, 1, INF],
-    [1, 0, INF, 1, 1],
-    [1, INF, 0, 1, INF],
-    [1, 1, 1, 0, 1],
-    [INF, 1, INF, 1, 0]]
-
-g=Graph(test_graph)
 class Visualisate():
     def __init__(self,matr):
         self.edges_rev=[]
@@ -23,7 +15,7 @@ class Visualisate():
 
         for node1 in range(self.size):
             for node2 in range(self.size):
-                if node1 != node2 and self.matr[node1][node2] != INF:
+                if node1 != node2 and self.matr[node1][node2] != inf:
                     self.edges_rev.append((node1, node2, self.matr[node1][node2]))
 
     def vis_simple_graph(self):
@@ -41,7 +33,7 @@ class Visualisate():
 
     def vis_shortest_way(self,start,final):
 
-
+        g=Graph(self.matr)
         res= g.FordBellman(start, final)
         print(res)
         shortestpath=[]
@@ -66,90 +58,6 @@ class Visualisate():
         title = 'graph test'
         plt.title(title)
         plt.show()
-        print(shortestpath)
-
-
-a=Visualisate(test_graph)
 
 
 
-from tkinter import *
-from matplotlib.figure import Figure
-
-
-
-
-
-
-
-app = Tk()
-
-
-
-
-
-def entry_data():
-
-
-    start = int(float(entry_widget1.get()))
-    finish = int(float(entry_widget2.get()))
-    return start,finish
-
-
-
-
-def plot():
-
-    fig = Figure(figsize=(5, 5),
-                 dpi=100)
-    start,finish = entry_data()
-    print(start)
-    print(finish)
-    entry_widget1.delete(0, END)
-    entry_widget2.delete(0, END)
-    a.vis_shortest_way(start,finish)
-
-
-
-
-
-
-canvas_widget = Canvas(app, width=500, height=500)
-canvas_widget.pack()
-
-
-
-label_widget1 = Label(app, text="Enter start")
-canvas_widget.create_window(150, 160, window=label_widget1)
-
-
-label_widget2 = Label(app, text="Enter finish")
-canvas_widget.create_window(150, 200, window=label_widget2)
-
-
-entry_widget1 = Entry(app)
-canvas_widget.create_window(300, 160, window=entry_widget1)
-
-
-entry_widget2 = Entry(app)
-canvas_widget.create_window(300, 200, window=entry_widget2)
-
-
-
-
-
-
-
-
-plot_button = Button(master=app,
-                     command=plot,
-                     height=2,
-                     width=10,
-                     text="Plot")
-
-# place the button
-# in main window
-plot_button.pack()
-
-# run the gui
-app.mainloop()
