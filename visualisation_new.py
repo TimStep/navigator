@@ -29,7 +29,7 @@ class PreparationForVisualization(Graph):
 
         net.repulsion(central_gravity=0, spring_length=200, spring_strength=0)
         net.show('visualisation.html')
-        webbrowser.open_new('file:///Users/nikolajznamenskij/PycharmProjects/NAVIGATOR/visualisation.html')
+        #webbrowser.open_new()???
 
 
 
@@ -42,7 +42,7 @@ class PreparationForVisualization(Graph):
 
         net.repulsion(central_gravity=0, spring_length=200, spring_strength=0)
         net.show('visualisation.html')
-        webbrowser.open_new('file:///Users/nikolajznamenskij/PycharmProjects/NAVIGATOR/visualisation.html')
+        #webbrowser.open_new()???
 
 
 
@@ -72,4 +72,4 @@ class PreparationForVisualization(Graph):
 
         net.repulsion(central_gravity=0, spring_length=200, spring_strength=0)
         net.show('visualisation.html')
-        #webbrowser.open()#???
+        #webbrowser.open()???
