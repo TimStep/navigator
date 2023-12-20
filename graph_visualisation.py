@@ -31,7 +31,7 @@ class Visualisate():
         plt.title(title)
         plt.show()
 
-    def vis_shortest_way(self,start,final):
+    def vis_shortest_way_FB(self,start,final):
 
         g=Graph(self.matr)
         res= g.FloydWarshall(start, final)[1]
@@ -56,6 +56,60 @@ class Visualisate():
         nx.draw_networkx_edges(G, pos=pos, edgelist=shortestpath, edge_color="r", width=3)
         nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
         title = 'graph test'
+        plt.title(title)
+        plt.show()
+    def vis_shortest_way_D(self,start,final):
+
+        g=Graph(self.matr)
+        res= g.Dijkstra(start, final)
+        print(res)
+        shortestpath=[]
+
+
+        for i in range(len(res)):
+            if i!=(len(res)-1):
+                shortestpath.append((res[i], res[i+1]))
+
+
+        edges = self.edges_rev
+
+
+        G = nx.DiGraph()
+        G.add_weighted_edges_from(edges)
+        weights = nx.get_edge_attributes(G, 'weight')
+        pos = nx.circular_layout(G)
+        nx.draw_networkx(G, pos=pos)
+
+        nx.draw_networkx_edges(G, pos=pos, edgelist=shortestpath, edge_color="r", width=3)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
+        title = 'shortest way with D algoritm'
+        plt.title(title)
+        plt.show()
+    def vis_shortest_way_FW(self,start,final):
+
+        g=Graph(self.matr)
+        res= g.FloydWarshall(start, final)[1]
+        print(res)
+        shortestpath=[]
+
+
+        for i in range(len(res)):
+            if i!=(len(res)-1):
+                shortestpath.append((res[i], res[i+1]))
+
+
+        edges = self.edges_rev
+
+
+        G = nx.DiGraph()
+        G.add_weighted_edges_from(edges)
+        weights = nx.get_edge_attributes(G, 'weight')
+        pos = nx.circular_layout(G)
+        nx.draw_networkx(G, pos=pos)
+
+        nx.draw_networkx_edges(G, pos=pos, edgelist=shortestpath, edge_color="r", width=3)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
+        title='shortest way with FW algoritm'
         plt.title(title)
         plt.show()
 
