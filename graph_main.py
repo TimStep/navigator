@@ -8,10 +8,33 @@ import copy
 
 class Graph():
 	
-	def __init__(self, matr):
+	def __init__(self, matr, matr2 = None, func = None):
 		#takes the initialization matrix
 		self.matr = matr
 		self.size = len(self.matr)
+		self.matr1 = self.matr
+		self.matr2 = matr2
+		#0 and 1 multipliers should be written, paramters are strictly x and y, do NOT write multiplication symbols
+		self.kx = []
+		self.ky = []
+		if func:
+			self.func = [k.strip() for k in func.split('+')]
+			free = float(self.func.pop(-1))
+			#print(self.func)
+			for term in self.func:
+				if term[1] == 'x':
+					self.kx.append(float(term[0]))
+				else:
+					self.ky.append(float(term[0]))
+					
+			for i in range(self.size):
+				for j in range(self.size):
+					sumx = 0
+					sumy = 0
+					for k in range(len(self.kx)): sumx+=self.kx[k]*self.matr1[i][j]**(len(self.kx)-k) + free
+					for k in range(len(self.ky)): sumy+=self.ky[k]*self.matr2[i][j]**(len(self.ky)-k) + free
+					self.matr[i][j] = sumx + sumy
+		#print(self.matr)
 		self.edges = []
 		for node1 in range(self.size):
 			for node2 in range(self.size):
