@@ -1,2 +1,4 @@
 depricated.py
 graph_systems.py
+*.cpy
+__pycache__

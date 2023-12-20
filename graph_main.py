@@ -1,5 +1,6 @@
 import math
 INF = math.inf
+import copy
 
 #IMPORTANT: nodes are indexed by numbers starting from zero, NOT names
 #If nodes are not connetcted the weight is INF
@@ -67,7 +68,7 @@ class Graph():
 	
 	def FloydWarshall(self, start, end):
 		
-		DP = self.matr
+		DP = copy.deepcopy(self.matr)
 		prev = [[None for j in range(self.size)] for i in range(self.size)] #for path reconstruction, previous[start][end] contains node previous to end on shortest start-end path
 		for i in range(self.size):
 			for j in range(self.size):
@@ -103,7 +104,7 @@ class Graph():
 		
 		#iterating by edges, faster if the graph in not dense
 		if len(self.edges) < self.size**2 or True: #!!!remove "or True" when iterating by nodes variant will be done
-			print('not dense')
+			#print('not dense')
 			for k in range(1, self.size):
 				for edge in self.edges:
 					if DP[edge[0]] + self.matr[edge[0]][edge[1]] < DP[edge[1]]:
@@ -117,7 +118,7 @@ class Graph():
 		
 		if DP[end] == INF: return "Route not possible"
 		return path[end]
-	
+'''
 g = Graph(test_graph)
 print(g.edges)
 print('Dijkstra')
@@ -128,3 +129,4 @@ print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in 
 print("Length: " + str(res[0]))
 print("Ford-Bellman")
 print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.FordBellman(2, 4)))
+'''
