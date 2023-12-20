@@ -5,20 +5,6 @@ import copy
 #IMPORTANT: nodes are indexed by numbers starting from zero, NOT names
 #If nodes are not connetcted the weight is INF
 #In case the graph is oriented the logic is: A[from_node][to_node]
-test_graph = [
-             [0, 1, 1, 1, INF],
-             [1, 0, INF, 1, 1], 
-             [1, INF, 0, 1, INF], 
-             [1, 1, 1, 0, 1], 
-             [INF, 1, INF, 1, 0]]
-
-#test graph: https://u.foxford.ngcdn.ru/uploads/tinymce_image/image/1959/1.png
-
-paradox_graph = [
-                  [0, 8, 5],
-                  [8, 0, 2],
-                  [5, 2, 0]]
-#the paradox is that the edge 0-1 is not the shortest 0-1 path
 
 class Graph():
 	
@@ -114,19 +100,9 @@ class Graph():
 					if DP[edge[1]] + self.matr[edge[1]][edge[0]] < DP[edge[0]]:
 						DP[edge[0]] = DP[edge[1]] + self.matr[edge[1]][edge[0]]
 						path[edge[0]] = path[edge[1]] + [edge[0]]
-					if k == self.size - 1 and (edge[0] == end or edge[1] == end): break
+					#if k == self.size - 1 and (edge[0] == end or edge[1] == end): break
 		
 		if DP[end] == INF: return "Route not possible"
 		return path[end]
-'''
-g = Graph(test_graph)
-print(g.edges)
-print('Dijkstra')
-print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.Dijkstra(2, 4)))
-print('Floyd-Warshall')
-res = g.FloydWarshall(2, 4)
-print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in res[1]))
-print("Length: " + str(res[0]))
-print("Ford-Bellman")
-print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.FordBellman(2, 4)))
-'''
+
+
