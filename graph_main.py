@@ -9,6 +9,7 @@ import copy
 class Graph():
 	
 	def __init__(self, matr, matr2 = None, func = None):
+		self.iter = 0 #will count the number of iterations of every algorithm
 		#takes the initialization matrix
 		self.matr = matr
 		self.size = len(self.matr)
@@ -58,6 +59,7 @@ class Graph():
 			
 			#node relaxation
 			for next_node in range(self.size):
+				self.iter+=1
 				if self.matr[curr_node][next_node] + dist_from_start[curr_node] < dist_from_start[next_node]:
 					dist_from_start[next_node] = self.matr[curr_node][next_node] + dist_from_start[curr_node]
 					path_from_start[next_node] = path_from_start[curr_node] + [next_node]
@@ -66,14 +68,20 @@ class Graph():
 			#choose next node to relax (curr_node)
 			closest_dist = INF
 			for candidate in range(self.size):
+				self.iter+=1
 				if candidate not in visited and dist_from_start[candidate] < closest_dist:
 					closest_dist = dist_from_start[candidate]
 					curr_node = candidate
 			
 			#check if route is possible
-			if closest_dist == INF: return "Route not possible"
+			if closest_dist == INF:
+				self.iter = 0
+				return "Route not possible"
 		
-		return path_from_start[end]
+		compl = self.iter
+		self.iter = 0
+		
+		return (path_from_start[end], dist_from_start[end], compl)
 	
 	def FloydWarshall(self, start, end):
 		
@@ -86,13 +94,16 @@ class Graph():
 		for k in range(1, self.size):
 			for i in range(self.size):
 				for j in range(self.size):
+					self.iter+=1
 					if DP[i][j] > DP[i][k] + DP[k][j]:
 						DP[i][j] = DP[i][k] + DP[k][j]
 						prev[i][j] = prev[k][j]
 		
 		#check if route is possible
 		l = DP[start][end] #shortest path length
-		if l == INF: return "Route not possible"
+		if l == INF:
+			self.iter = 0
+			return "Route not possible"
 		#reconstruct the path
 		path = [end]
 		j = end
@@ -101,7 +112,10 @@ class Graph():
 			j = prev[start][j]
 		path = path[::-1]
 		
-		return (l, path)
+		compl = self.iter
+		self.iter = 0
+		
+		return (path, l, compl)
 	
 	def FordBellman(self, start, end):
 		
@@ -116,6 +130,7 @@ class Graph():
 			#print('not dense')
 			for k in range(1, self.size):
 				for edge in self.edges:
+					self.iter+=1
 					if DP[edge[0]] + self.matr[edge[0]][edge[1]] < DP[edge[1]]:
 						DP[edge[1]] = DP[edge[0]] + self.matr[edge[0]][edge[1]]
 						path[edge[1]] = path[edge[0]] + [edge[1]]
@@ -125,7 +140,10 @@ class Graph():
 						path[edge[0]] = path[edge[1]] + [edge[0]]
 					#if k == self.size - 1 and (edge[0] == end or edge[1] == end): break
 		
+		compl = self.iter
+		self.iter = 0
+		
 		if DP[end] == INF: return "Route not possible"
-		return path[end]
+		return (path[end], DP[end], compl)
 
 
