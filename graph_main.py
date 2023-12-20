@@ -1,4 +1,5 @@
 import math
+import copy
 INF = math.inf
 
 #IMPORTANT: nodes are indexed by numbers starting from zero, NOT names
@@ -67,7 +68,8 @@ class Graph():
 	
 	def FloydWarshall(self, start, end):
 		
-		DP = self.matr
+		# DP = self.matr
+		DP = copy.deepcopy(self.matr)
 		prev = [[None for j in range(self.size)] for i in range(self.size)] #for path reconstruction, previous[start][end] contains node previous to end on shortest start-end path
 		for i in range(self.size):
 			for j in range(self.size):
@@ -76,6 +78,7 @@ class Graph():
 		for k in range(1, self.size):
 			for i in range(self.size):
 				for j in range(self.size):
+					print(k, i, j)
 					if DP[i][j] > DP[i][k] + DP[k][j]:
 						DP[i][j] = DP[i][k] + DP[k][j]
 						prev[i][j] = prev[k][j]
@@ -103,7 +106,7 @@ class Graph():
 		
 		#iterating by edges, faster if the graph in not dense
 		if len(self.edges) < self.size**2 or True: #!!!remove "or True" when iterating by nodes variant will be done
-			print('not dense')
+			#print('not dense')
 			for k in range(1, self.size):
 				for edge in self.edges:
 					if DP[edge[0]] + self.matr[edge[0]][edge[1]] < DP[edge[1]]:
@@ -114,17 +117,26 @@ class Graph():
 						DP[edge[0]] = DP[edge[1]] + self.matr[edge[1]][edge[0]]
 						path[edge[0]] = path[edge[1]] + [edge[0]]
 					if k == self.size - 1 and (edge[0] == end or edge[1] == end): break
-		
+		'''
+		else: #by nodes, if graph is dense
+			for k in range(1, self.size):
+				for i in range()
+		'''
 		if DP[end] == INF: return "Route not possible"
 		return path[end]
 	
-g = Graph(test_graph)
+g = Graph(paradox_graph)
 print(g.edges)
+print(g.matr)
 print('Dijkstra')
-print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.Dijkstra(2, 4)))
+print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.Dijkstra(0, 1)))
+
 print('Floyd-Warshall')
-res = g.FloydWarshall(2, 4)
+res = g.FloydWarshall(0, 1)
 print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in res[1]))
 print("Length: " + str(res[0]))
+print(g.edges)
+print(g.matr)
+
 print("Ford-Bellman")
-print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.FordBellman(2, 4)))
+print("Shortest path from node 2 to node 4: " + '->'.join(str(node) for node in g.FordBellman(0, 1)))

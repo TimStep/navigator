@@ -34,7 +34,7 @@ class Visualisate():
     def vis_shortest_way(self,start,final):
 
         g=Graph(self.matr)
-        res= g.FordBellman(start, final)
+        res= g.FloydWarshall(start, final)[1]
         print(res)
         shortestpath=[]
 
