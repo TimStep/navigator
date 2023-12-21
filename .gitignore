@@ -1,2 +1,5 @@
 depricated.py
 graph_systems.py
+__pycache__
+graph_construct.py
+graph_example_of_work.py
